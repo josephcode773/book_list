@@ -814,8 +814,9 @@ export default class BookList extends Component {
 #### Section 3, Lesson 42: Implementation of a Container Class
 - react and redux aare seperate project.  needs seperate libraty called react/redux.
 - edited book-list.js
+- edited ./components/app.js
 - added new function mapStateToProps
-- What does connect do? Makes Containers: function+component=container
+- What does connect do? Makes Smart Containers: function+component=smart_container
 ````
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -849,5 +850,131 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps)(BookList);  //connect does: function+component=container
 ````
+- edited ./components/app.js
+
+````
+import React, { Component } from 'react';
+
+import BookList from '../containers/book-list'
+
+export default class App extends Component {
+  render() {
+    return (
+      <div>
+				<BookList />
+			</div>
+    );
+  }
+}
+
+````
 
 #### Section 4, Lesson 43: Containers and Reducers Review
+- A container is a normal react componet that gets Bonded to the application state.  we meld the two together. whenever the app state changes, the container will re-render as well.
+
+#### Section 4, Lesson 44: Actions and Action Creators
+
+- Problem:  reducer_books list is STATIC. It don't change.
+- actions and action creators...
+
+actions creator: function that returns an object
+
+action then automatically sent to all reducers
+
+reducers assemble a new state
+
+then the new state flows into all the containers
+
+#### Section 4, Lesson 45: Binding Action Creators
+
+-action creator: function that returns an action
+
+-action: object that flows throught diffrent reducers
+
+- reducers: can use that action to produce a diff value for it's particular piece of state.
+
+-goal: to click on book and get more detail about it.
+
+-edited /actions/index.js
+
+-edited: /containers/book-list.js
+
+````
+export function selectBook(book) {
+	console.log("a book has been selected:", book.title);
+}
+````
+
+````
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { selectBook } from '../actions/index';
+import { bindActionCreators } from 'redux';
+
+class BookList extends Component {
+	renderList() {
+		return this.props.books.map((book) => {
+			return (
+				<li key={book.title} className="list-group-item">{book.title}</li>
+			);
+		});
+	}
+
+	render() {
+		return (
+			<ul className="list-group col-sm-4">
+				{this.renderList()}
+			</ul>
+		)
+	}
+}
+
+function mapStateToProps(state) {
+	// Whatever is returned will show up as props
+	// inside of BookList
+	return {
+		books: state.books
+	};
+	// Whatever is returned will be this.props
+}
+
+// Anything returned from this function will end up as props
+// on the BookList container
+function mapDispatchToProps(dispatch) {
+	//Whenever selectBook is called, the result should be passed
+	// to all of our reducers
+	return bindActionCreators({ selectBook: selectBook }, dispatch)
+}
+
+// Promote BookList from a component to a container - it need to know
+// about this new dispatch method, selectBook.  Make it avaialbe
+// as a prop.
+export default connect(mapStateToProps, mapDispatchToProps)(BookList);  //connect does: function+component=container
+````
+
+#### Section 4, Lesson 46: Creating an Action
+
+- edited: /actions/indes.js
+````
+export function selectBook(book) {
+	// selectBook is an ActionCreator, it needs to retun an action,
+	// an object with a type property.
+	// Aways Returns type and payload
+	return {
+		type: 'BOOK_SELECTED',
+		payload: book
+	};
+}
+
+````
+
+#### Section 4, Lesson 47: Consuming Actions in Reducers
+
+BIBLE STUDY CH:304 - 6:30
+
+
+#### Section 4, Lesson 48: Consuming Actions in Reducers Contined
+
+
+#### Section 4, Lesson 49: Conditional Rendering
+
