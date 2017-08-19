@@ -978,3 +978,12 @@ BIBLE STUDY CH:304 - 6:30
 
 #### Section 4, Lesson 49: Conditional Rendering
 
+#### Section 4, Lesson 50: Reducers and Actions Review
+- application state is completely diffrent from component State
+- application State is formed by reducers
+- each key is assigned one reducer
+- reducers change state over time via action
+- took picture of Graphic Explanation and Flow Chart to root directory.
+- App appears to be complete, but it looks ugly.
+
+
